@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model products {
+  id       Int        @id
+  name     String
+  variants variants[]
+}
+
+model variants {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  type       String
+  price      Decimal  @db.Decimal(10, 2)
+  stock      Int?     @default(100)
+  image_url  String
+  products   products @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
