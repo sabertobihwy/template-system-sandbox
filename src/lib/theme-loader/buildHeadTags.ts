@@ -1,5 +1,5 @@
 import { buildImportMap } from "./buildImportMap";
-import { CdnFn, ThemeManifest, VendorManifest } from "./getManifest";
+import { CdnFn, ThemeManifest, VendorManifestV2 } from "./getManifest";
 
 /** 结构化的 head 标签描述，便于在 React/Next 中直接渲染为 <link> / <meta> 等 */
 export type LinkTag =
@@ -10,9 +10,10 @@ export type LinkTag =
     | { tag: 'meta'; name: string; content: string };
 
 export function buildHeadTags(opts: {
+    cdnBase: string,
     cdnUrl: CdnFn;
     themeName: string;               // e.g. "cool"
-    vendor: VendorManifest;
+    vendor: VendorManifestV2;
     theme: ThemeManifest;
     scenes: string[];                // e.g. ["shop","product"]
     currentScene?: string;           // 当前页面/路由对应的场景
@@ -20,7 +21,7 @@ export function buildHeadTags(opts: {
     strategy?: 'conservative' | 'aggressive'; // 其他场景预取强度
 }): { importMapJson: string; links: LinkTag[] } {
     const {
-        cdnUrl, vendor, theme, scenes,
+        cdnBase, cdnUrl, vendor, theme, scenes,
         themeName, currentScene,
         cssFetchPriority = 'high',
         strategy = 'conservative'
@@ -34,12 +35,12 @@ export function buildHeadTags(opts: {
     const links: LinkTag[] = [];
 
     // 2) vendor 预抓（“钥匙带大门”）
-    const v = (name: 'react' | 'react-dom' | 'react-dom/client' | 'react/jsx-runtime') => cdnUrl(vendor[name]);
+    const v = (name: 'react-dom' | 'react-dom/client') => cdnUrl(vendor.files[name]);
 
     // 必 preload：小入口 client（会带上 react / react-dom），以及 jsx-runtime
     links.push(
+        { tag: 'link', rel: 'preconnect', href: cdnBase, crossOrigin: 'anonymous' },
         { tag: 'link', rel: 'modulepreload', href: v('react-dom/client'), crossOrigin: 'anonymous' },
-        { tag: 'link', rel: 'modulepreload', href: v('react/jsx-runtime'), crossOrigin: 'anonymous' },
     );
     // 一般不需要显式 preload react：由 client 的依赖链并行拉下
     // 如果你确知本页不做 hydration 但会立刻用到 react，可按需追加 prefetch 或低优先级 modulepreload

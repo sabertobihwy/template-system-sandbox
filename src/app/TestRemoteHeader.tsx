@@ -29,7 +29,9 @@ export default function TestRemoteHeader() {
 
     useEffect(() => {
         (async () => {
-            const Comp = await loadRemoteComponent('https://theme-system.pages.dev/v1/cool/cool-shop-header.D_f2BT0k.js', 'default');
+            const Comp = await loadRemoteComponent('https://theme-system.pages.dev/v1/cool/cool-shop-header.D_f2BT0k.js', {
+                exportName: 'default'
+            });
             setHeader(() => Comp);           // ✅ 关键：用“惰性赋值”包一层
             // 或者：setHeader(() => (Comp as React.ComponentType<any>));
         })();

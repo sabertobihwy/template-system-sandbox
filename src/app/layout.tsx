@@ -3,6 +3,7 @@ import {
   getManifests,
   buildHeadTags
 } from '../lib/theme-loader'
+import { ReactBridge } from '@/lib/theme-loader/utils/ReactBridge';
 
 // app/layout.tsx
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -17,6 +18,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { vendor, theme } = await getManifests(themeName, version, cdnUrl);
 
   const { importMapJson, links } = buildHeadTags({
+    cdnBase,
     cdnUrl,
     themeName,
     vendor,
@@ -53,7 +55,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           return null;
         })}
       </head>
-      <body>{children}</body>
+      <body>
+        <ReactBridge />
+        {children}
+      </body>
     </html>
   );
 }
