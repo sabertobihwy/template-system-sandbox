@@ -5,13 +5,6 @@ type LoadOpts = WaitOpts & {
 
 export async function loadRemoteComponent(url: string, opts: LoadOpts = {}) {
     await waitForReactGlobal({ timeoutMs: opts.timeoutMs ?? 10000, signal: opts.signal });           // ✅ 确保 ReactBridge 已经把全局塞好了
-    // 用 new Function 动态构建 import 调用，避免被打包器提前解析
-    // const dynamicImport = new Function(
-    //     'url',
-    //     'return import(/* webpackIgnore: true */ /* @vite-ignore */ url)'
-    //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // ) as (u: string) => Promise<Record<string, any>>;
-
     // 直接用原生 dynamic import；避免 new Function 触发 CSP: unsafe-eval
     const Comp = await import(
         /* webpackIgnore: true */

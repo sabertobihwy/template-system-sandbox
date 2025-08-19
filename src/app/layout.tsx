@@ -55,7 +55,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           return null;
         })}
       </head>
-      <body>
+      {/* todo: 考虑给template加，而不是整体加 */}
+      <body className="font-inter antialiased">
         <ReactBridge />
         {children}
       </body>

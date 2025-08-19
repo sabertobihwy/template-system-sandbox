@@ -1,4 +1,3 @@
-// 要“更早”就位：用 useLayoutEffect
 'use client'
 import * as React from 'react'
 import * as JSX from 'react/jsx-runtime'

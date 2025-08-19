@@ -30,9 +30,7 @@ export function generateCdnUrl(cdnBase: string): CdnFn {
 
 async function fetchJSON<T>(url: string): Promise<T> {
     const res = await fetch(url, {
-        // 强制条件请求，配合 CDN 的 no-cache + ETag，未变更走 304
-        cache: 'no-cache',
-        next: { revalidate: 60 }, // 适度复用，减少同一分钟内的多次请求
+        next: { revalidate: 60 }
     });
     if (!res.ok) throw new Error(`Fetch failed: ${url} -> ${res.status}`);
     return res.json();
