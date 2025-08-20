@@ -7,7 +7,7 @@ import { ReactBridge } from '@/lib/theme-loader/utils/ReactBridge';
 
 // app/layout.tsx
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const themeName = /* 从域名/headers 解析 */ 'cool';
+  const themeName = /* 从域名/headers 解析 */ 'general';
   const scenes = /* SSR 解析 */['shop'];
   const current = /* 当前路由对应场景 */      'shop';
   const version = 'v1';

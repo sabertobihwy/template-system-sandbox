@@ -57,6 +57,7 @@ export async function getThemeManifest(themeName: string, version: string, cdnUr
 export async function getManifests(themeName: string, version: string, cdnUrl: CdnFn) {
     const vendor = await getVendorManifest(version, cdnUrl)
     const theme = await getThemeManifest(themeName, version, cdnUrl)
+    console.log(theme)
     return { vendor, theme }
 }
 

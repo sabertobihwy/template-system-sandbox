@@ -2,17 +2,16 @@ export interface ShopCardContent {
     image: string
     title: string
     description: string
-    rating: number
+    slogan: string
     price: string
     offerLabel?: string
 }
-
 
 export type ShopSidebarContentProps = {
     discoverItems: string[]
     priceRanges: string[]
     multiSelectItems: string[]
-    ratingLevels: number[]
+    ratingLevels?: number[]
 }
 export type ButtonContent = {
     label: string
